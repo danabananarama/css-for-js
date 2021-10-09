@@ -1,5 +1,7 @@
 .controlPane {
   padding: 24px;
+  /* I think I'm meant to adjust this for the overflow padding */
+  padding-right: 8px;
   /* Optical centering */
   padding-top: 18px;
   background-color: white;
@@ -14,6 +16,8 @@
 
 .title {
   margin: 0;
+  line-height: 1.5em;
+  padding-bottom: 0.5em;
   /* Optical centering */
   margin-bottom: -4px;
 }

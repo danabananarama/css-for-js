@@ -1,4 +1,6 @@
 .characterEditor {
+  /* Create a different stacking context so it stacks on top of the background  */
+  isolation: isolate;
   padding-top: 128px;
   padding-bottom: 64px;
 }
@@ -8,6 +10,7 @@
 
 .header {
   padding-bottom: 64px;
+  width: 65%;
 }
 
 .title {
@@ -27,4 +30,5 @@
 }
 
 .controlColumn {
+  width: 50%;
 }
