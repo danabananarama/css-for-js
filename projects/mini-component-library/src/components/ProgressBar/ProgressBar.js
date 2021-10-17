@@ -10,12 +10,20 @@ const barHeights = {
   medium: "12px",
   large: "24px"
 }
+const borderRadius = {
+  small: "4px",
+  medium: "4px",
+  large: "8px"
+}
 
 const ProgressBar = ({ value, size }) => {
   return <div role="progressbar" aria-valuenow={value} aria-valuemin="0" aria-valuemax="100">
-    <FullBar style={{"--bar-height": barHeights[size]}}>
-      <Progress value={value} padding={size === "large" ? 4 : 0} />
+    <FullBar style={{"--bar-height": barHeights[size], "--bar-border-radius": borderRadius[size]}}>
+      <ProgressWrapper padding={size === "large" ? 4 : 0}>
+      <Progress value={value} />
+      </ProgressWrapper>
     </FullBar>
+    <VisuallyHidden>{`${value}px`}</VisuallyHidden>
   </div>
 };
 
@@ -26,21 +34,30 @@ const FullBar = styled.div`
 
   background: ${COLORS.transparentGray15};
   position: absolute;
-  border-radius: 4px;
+  border-radius: var(--bar-border-radius);
 `
 
-
-const Progress = styled.div`
-  width: ${p => `${parseInt(p.value) * (370 - 2 * p.padding) / 100}px`};
-
+const ProgressWrapper = styled.div`
   top: ${p => p.padding}px;
   left: ${p => p.padding}px;
   bottom: ${p => p.padding}px;
+  right: ${p => p.padding}px;
 
-  background: ${COLORS.primary};
   position: absolute;
 
-  border-radius: ${p => parseInt(p.value) < 99 ? "4px 0px 0px 4px" : "4px"};
+  /* round corners near 100% */
+  overflow: hidden;
+
+  border-radius: 4px;
+`
+
+const Progress = styled.div`
+  width: ${p => `${p.value}%`};
+  height: 100%;
+
+  background: ${COLORS.primary};
+
+  border-radius: "4px 0px 0px 4px";
 `
 
 export default ProgressBar;
