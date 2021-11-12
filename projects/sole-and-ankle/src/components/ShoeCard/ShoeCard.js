@@ -1,9 +1,9 @@
-import React from 'react';
-import styled from 'styled-components/macro';
+import React from "react";
+import styled from "styled-components/macro";
 
-import { COLORS, WEIGHTS } from '../../constants';
-import { formatPrice, pluralize, isNewShoe } from '../../utils';
-import Spacer from '../Spacer';
+import { COLORS, WEIGHTS } from "../../constants";
+import { formatPrice, pluralize, isNewShoe } from "../../utils";
+import Spacer from "../Spacer";
 
 const ShoeCard = ({
   slug,
@@ -32,23 +32,50 @@ const ShoeCard = ({
       : 'default'
 
   return (
-    <Link href={`/shoe/${slug}`}>
-      <Wrapper>
-        <ImageWrapper>
-          <Image alt="" src={imageSrc} />
-        </ImageWrapper>
-        <Spacer size={12} />
-        <Row>
-          <Name>{name}</Name>
-          <Price>{formatPrice(price)}</Price>
-        </Row>
-        <Row>
-          <ColorInfo>{pluralize('Color', numOfColors)}</ColorInfo>
-        </Row>
-      </Wrapper>
-    </Link>
+    <CardWrapper>
+      <Link href={`/shoe/${slug}`}>
+        <Wrapper>
+          <ImageWrapper>
+            <Image alt="" src={imageSrc} />
+            {variant === "new-release" && (
+              <NewRelease>Just Released!</NewRelease>
+            )}
+            {variant === "on-sale" && <Sale>Sale</Sale>}
+          </ImageWrapper>
+          <Spacer size={12} />
+          <Row>
+            <Name>{name}</Name>
+            <Price onSale={variant === "on-sale"}>{formatPrice(price)}</Price>
+          </Row>
+          <Row>
+            <ColorInfo>{pluralize("Color", numOfColors)}</ColorInfo>
+            {variant === "on-sale" && (
+              <SalePrice>{formatPrice(salePrice)}</SalePrice>
+            )}
+          </Row>
+        </Wrapper>
+      </Link>
+    </CardWrapper>
   );
 };
+
+const Flag = styled.div`
+  position: absolute;
+  color: ${COLORS.white};
+  padding: 8px;
+  top: 12px;
+  right: -4px;
+`;
+
+const NewRelease = styled(Flag)`
+  background-color: ${COLORS.secondary};
+`;
+
+const Sale = styled(Flag)`
+  background-color: ${COLORS.primary};
+`;
+
+const CardWrapper = styled.div``;
 
 const Link = styled.a`
   text-decoration: none;
@@ -61,10 +88,14 @@ const ImageWrapper = styled.div`
   position: relative;
 `;
 
-const Image = styled.img``;
+const Image = styled.img`
+  width: 100%;
+`;
 
 const Row = styled.div`
   font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Name = styled.h3`
@@ -72,7 +103,10 @@ const Name = styled.h3`
   color: ${COLORS.gray[900]};
 `;
 
-const Price = styled.span``;
+const Price = styled.span`
+  color: ${(p) => (p.onSale ? COLORS.gray[700] : "")};
+  text-decoration: ${(p) => (p.onSale ? "line-through" : "")};
+`;
 
 const ColorInfo = styled.p`
   color: ${COLORS.gray[700]};
